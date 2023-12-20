@@ -13,7 +13,7 @@ use hand::Hand;
 use hand_kind::HandKind;
 
 fn main() {
-    let hands = parse_file("./input.txt").unwrap();
+    let hands = parse_file("../input.txt").unwrap();
 
     println!("Part 1 Answer: {}", total_winnings(hands))
 }
@@ -103,7 +103,7 @@ fn test_hand() {
         }
     ];
 
-    let hands = parse_file("./test-input.txt").unwrap();
+    let hands = parse_file("../test-input.txt").unwrap();
 
     assert_eq!(expected_hands, hands);
 
