@@ -5,11 +5,18 @@ use std::io;
 use std::io::BufRead;
 use std::path::Path;
 use regex::Regex;
+use rayon::prelude::*;
 
 fn main() {
-    assert_eq!(solve("./test-input.txt").unwrap(), 6);
+    let data = parse("./test-input.txt").unwrap();
+    assert_eq!(part1(&data), 6);
 
-    println!("Part 1 Answer: {}", solve("./input.txt").unwrap())
+    // let data = parse("./test-input2.txt").unwrap();
+    // assert_eq!(part2(&data), 6);
+
+    let data = parse("./input.txt").unwrap();
+    println!("Part 1 Answer: {}", part1(&data));
+    // println!("Part 2 Answer: {}", part2(&data));
 }
 
 fn parse_line<'a>(map: &mut HashMap<String, (String, String)>, line: &str) -> Option<String> {
@@ -27,7 +34,9 @@ fn parse_line<'a>(map: &mut HashMap<String, (String, String)>, line: &str) -> Op
     return Some(node)
 }
 
-fn solve(filename: &str) -> Result<usize, Box<dyn Error>> {
+type Data = (String, HashMap<String, (String, String)>);
+
+fn parse(filename: &str) -> Result<Data, Box<dyn Error>> {
     let path = Path::new(filename);
     let file = File::open(&path)?;
     let reader = io::BufReader::new(file);
@@ -45,6 +54,13 @@ fn solve(filename: &str) -> Result<usize, Box<dyn Error>> {
         }
         parse_line(&mut map, line.as_str());
     }
+
+    return Ok((instructions, map))
+}
+
+fn part1(data: &Data)-> usize {
+    let instructions = &data.0;
+    let map = &data.1;
 
     let mut steps = 0;
     let start = "AAA";
@@ -64,5 +80,5 @@ fn solve(filename: &str) -> Result<usize, Box<dyn Error>> {
         }
     }
 
-    Ok(steps)
+    steps
 }
